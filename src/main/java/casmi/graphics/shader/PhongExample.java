@@ -70,9 +70,9 @@ public class PhongExample extends Applet {
         m.specular(specular);
         m.shininess(100.0f);
 
-        float ambient2[] = {0.1f, 0.3f, 0.3f, 1.0f};
+        float ambient2[] = {0.1f, 0.4f, 0.4f, 1.0f};
         float diffuse2[] = {0.2f, 0.7f, 0.7f, 1.0f};
-        float specular2[] = {0.5f, 0.5f, 0.5f, 1.0f};
+        float specular2[] = {0.7f, 0.7f, 0.7f, 1.0f};
 
         m2.ambient(ambient2);
         m2.diffuse(diffuse2);
@@ -86,12 +86,16 @@ public class PhongExample extends Applet {
         light.setSpecular(lightSpecular);
         light.setDirection(lightPos[0], lightPos[1], lightPos[2]);
         s1.setPosition(-1.5, 0, -5);
+        s2.setPosition(1.5, 0, -5);
         p = new Perspective(50.0, getWidth() / (double)getHeight(), 1.0, 1000.0);
         setPerspective(p);
         s1.setMaterial(m);
         s1.setShader(shaderT);
         s1.setTexture(earth);
         addObject(s1);
+        s2.setMaterial(m2);
+        s2.setShader(shaderP);
+        addObject(s2);
         addLight(light);
     }
 
@@ -99,6 +103,7 @@ public class PhongExample extends Applet {
     public void update() {
         rot += 0.1;
         s1.setRotation(rot, rot * 3, rot * 5);
+        s2.setRotation(rot, rot * 3, rot * 5);
     }
 
     @Override
@@ -108,10 +113,14 @@ public class PhongExample extends Applet {
     public void keyEvent(KeyEvent e) {
         if (e == KeyEvent.PRESSED) {
             if (getKey() == 's') {
-                if (s1.isEnableShader())
+                if (s1.isEnableShader()){
                     s1.disableShader();
-                else
+                    s2.disableShader();
+                }
+                else{
                     s1.enableShader();
+                    s2.enableShader();
+                }
             }
         }
     }
