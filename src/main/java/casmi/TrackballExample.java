@@ -29,6 +29,8 @@ import casmi.graphics.object.Perspective;
  * Trackball example.
  *
  * @author T. Takeuchi
+ *
+ * @see casmi.Trackball
  */
 public class TrackballExample extends Applet {
 
@@ -38,7 +40,7 @@ public class TrackballExample extends Applet {
 
     Trackball trackball;
 
-    int prvMouseX = 0, prvMouseY = 0;
+    int prevMouseX = 0, prevMouseY = 0;
 
     Perspective p;
     Camera c;
@@ -67,18 +69,17 @@ public class TrackballExample extends Applet {
         box.setFillColor(ColorSet.WHITE);
         group.add(box);
 
-       // group.setPosition(getWidth() / 2.0, getHeight() / 2.0);
-
         addObject(group);
 
-        p = new Perspective(30.0, (double)getWidth() / (double)getHeight(), 1.0, 100.0);
-        c = new Camera(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+        Perspective perspective = new Perspective(30.0, getWidth() / (double)getHeight(), 1.0, 100.0);
+        setPerspective(perspective);
 
-        setPerspective(p);
-        setCamera(c);
+        Camera camera = new Camera(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+        setCamera(camera);
 
         // Create Trackball object.
         trackball = new Trackball(this);
+        trackball.setCamera(camera);
     }
 
     @Override
@@ -87,8 +88,8 @@ public class TrackballExample extends Applet {
     @Override
     public void mouseEvent(MouseEvent e, MouseButton b) {
         if (e == MouseEvent.PRESSED) {
-            prvMouseX = getMouseX();
-            prvMouseY = getMouseY();
+            prevMouseX = getMouseX();
+            prevMouseY = getMouseY();
         }
 
         if (e == MouseEvent.DRAGGED && b == MouseButton.LEFT) {
@@ -96,13 +97,13 @@ public class TrackballExample extends Applet {
             int mouseY = getMouseY();
 
             // Update Trackball.
-            trackball.update(mouseX, mouseY, prvMouseX, prvMouseY);
+            trackball.update(mouseX, mouseY, prevMouseX, prevMouseY);
 
             // Rotate an object with Trackball.
             trackball.rotate(group);
 
-            prvMouseX = mouseX;
-            prvMouseY = mouseY;
+            prevMouseX = mouseX;
+            prevMouseY = mouseY;
         }
     }
 
@@ -112,5 +113,4 @@ public class TrackballExample extends Applet {
     public static void main(String[] args) {
         AppletRunner.run("casmi.TrackballExample", "TrackballExample");
     }
-
 }

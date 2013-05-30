@@ -46,7 +46,6 @@ public class PhongExample extends Applet {
     Light light = new Light(LightMode.DIRECTION);
     Material m = new Material();
     Material m2 = new Material();
-    Perspective p;
     double lightPos[] = {10.0, 15.0, 10.0, 0.0};
     Shader shaderT = new Shader("Texture");
     Shader shaderP = new Shader("Phong");
@@ -55,11 +54,10 @@ public class PhongExample extends Applet {
     @Override
     public void setup() {
         setSize(1024, 768);
-        s1.setStroke(false);
 
-        float lightAmbient[] = {0.8f, 0.8f, 0.8f, 1.0f};
-        float lightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
-        float lightSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+        s1.setStroke(false);
+        s1.setPosition(-1.5, 0, -5);
+        s2.setPosition(1.5, 0, -5);
 
         float ambient[] = {0.7f, 0.7f, 0.7f, 1.0f};
         float diffuse[] = {0.7f, 0.7f, 0.7f, 1.0f};
@@ -79,24 +77,28 @@ public class PhongExample extends Applet {
         m2.specular(specular2);
         m2.shininess(100.0f);
 
+        s1.setMaterial(m);
+        s1.setShader(shaderT);
         Texture earth = new Texture(IMAGE_PATH);
+        s1.setTexture(earth);
+        addObject(s1);
+
+        s2.setMaterial(m2);
+        s2.setShader(shaderP);
+        addObject(s2);
+
+        float lightAmbient[] = {0.8f, 0.8f, 0.8f, 1.0f};
+        float lightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+        float lightSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
         light.setAmbient(lightAmbient);
         light.setDiffuse(lightDiffuse);
         light.setSpecular(lightSpecular);
         light.setDirection(lightPos[0], lightPos[1], lightPos[2]);
-        s1.setPosition(-1.5, 0, -5);
-        s2.setPosition(1.5, 0, -5);
-        p = new Perspective(50.0, getWidth() / (double)getHeight(), 1.0, 1000.0);
-        setPerspective(p);
-        s1.setMaterial(m);
-        s1.setShader(shaderT);
-        s1.setTexture(earth);
-        addObject(s1);
-        s2.setMaterial(m2);
-        s2.setShader(shaderP);
-        addObject(s2);
         addLight(light);
+
+        Perspective p = new Perspective(50.0, getWidth() / (double)getHeight(), 1.0, 1000.0);
+        setPerspective(p);
     }
 
     @Override
@@ -111,16 +113,13 @@ public class PhongExample extends Applet {
 
     @Override
     public void keyEvent(KeyEvent e) {
-        if (e == KeyEvent.PRESSED) {
-            if (getKey() == 's') {
-                if (s1.isEnableShader()){
-                    s1.disableShader();
-                    s2.disableShader();
-                }
-                else{
-                    s1.enableShader();
-                    s2.enableShader();
-                }
+        if (e == KeyEvent.PRESSED && getKey() == 's') {
+            if (s1.isEnableShader()) {
+                s1.disableShader();
+                s2.disableShader();
+            } else {
+                s1.enableShader();
+                s2.enableShader();
             }
         }
     }
@@ -128,5 +127,4 @@ public class PhongExample extends Applet {
     public static void main(String[] args) {
         AppletRunner.run("casmi.graphics.shader.PhongExample", "Phong Example");
     }
-
 }
